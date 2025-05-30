@@ -392,40 +392,69 @@ A fun terminal application that displays GIFs as pixelated ASCII art!
 
 ## Usage
 
-### Play a single GIF:
+### Interactive Mode (Default - Full Controls):
 ```bash
-gif-terminal path/to/your/image.gif
+gif-terminal                              # Play all GIFs in gifs/ folder
+gif-terminal path/to/gif1.gif path/to/gif2.gif  # Play specific GIFs
+gif-terminal path/to/gif/directory/       # Play all GIFs in directory
 ```
 
-### Play all GIFs in a directory:
+### Simple Mode (Classic Playback):
 ```bash
-gif-terminal path/to/gif/directory/
+gif-terminal --simple path/to/your/image.gif
 ```
 
-### Play GIFs from the default directory:
+## Interactive Controls
+
+When in interactive mode, use these keyboard controls:
+- **SPACE**: Play/Pause
+- **N**: Next GIF in playlist
+- **P**: Previous GIF in playlist  
+- **R**: Restart current GIF
+- **L**: Toggle loop mode for current GIF
+- **Q**: Quit
+
+## Playlist Management
+
+### Save and Load Playlists:
 ```bash
-gif-terminal
+# Save current playlist
+gif-terminal gif1.gif gif2.gif gif3.gif --save-playlist my-playlist.json
+
+# Load saved playlist
+gif-terminal --load-playlist my-playlist.json
+
+# Load playlist and add more GIFs
+gif-terminal --load-playlist my-playlist.json additional-gif.gif
 ```
-(This will play all GIFs in the `gifs/` folder)
 
 ## Options
 
 - `-w, --width`: Set terminal width (default: 80)
 - `--height`: Set terminal height (default: 24)
 - `--no-color`: Use ASCII characters instead of colors
-- `--no-loop`: Play once instead of looping
+- `--no-loop`: Don't loop individual GIFs
+- `--simple`: Use simple playback mode (no interactive controls)
+- `--save-playlist FILE`: Save playlist to JSON file
+- `--load-playlist FILE`: Load playlist from JSON file
 
 ## Examples
 
 ```bash
-# Play with custom size
-gif-terminal my-gif.gif -w 120 --height 30
+# Interactive mode with custom size
+gif-terminal *.gif -w 120 --height 30
 
-# Play without colors (ASCII only)
-gif-terminal my-gif.gif --no-color
+# Simple mode without colors
+gif-terminal --simple --no-color my-gif.gif
 
-# Play once without looping
-gif-terminal my-gif.gif --no-loop
+# Create and save a playlist
+gif-terminal ~/Downloads/*.gif --save-playlist favorites.json
+
+# Load playlist and play interactively
+gif-terminal --load-playlist favorites.json
+
+# Mix of files and directories
+gif-terminal file1.gif ~/gif-folder/ file2.gif
 ```
 
 ## Adding GIFs
@@ -466,9 +495,14 @@ main() {
     echo "🎬 Add your GIF files to: $INSTALL_DIR/gifs/"
     echo
     echo "Usage:"
-    echo "  gif-terminal                    # Play all GIFs in the gifs/ folder"
-    echo "  gif-terminal path/to/file.gif   # Play a specific GIF"
-    echo "  gif-terminal path/to/directory/ # Play all GIFs in a directory"
+    echo "  gif-terminal                           # Interactive mode with all GIFs in gifs/"
+    echo "  gif-terminal file1.gif file2.gif      # Interactive mode with specific GIFs"
+    echo "  gif-terminal --simple file.gif        # Simple playback mode"
+    echo "  gif-terminal --save-playlist list.json # Save current playlist"
+    echo "  gif-terminal --load-playlist list.json # Load saved playlist"
+    echo
+    echo "Interactive Controls:"
+    echo "  SPACE: Play/Pause | N: Next | P: Previous | R: Restart | L: Loop Toggle | Q: Quit"
     echo
     echo "⚠️  Please restart your terminal or run: source ~/.bashrc (or ~/.zshrc)"
     echo
